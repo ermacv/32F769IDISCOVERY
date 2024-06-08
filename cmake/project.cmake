@@ -7,6 +7,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/build_common/compiler.cmake)
 # Include common linker options
 include(${CMAKE_CURRENT_LIST_DIR}/build_common/linker.cmake)
 ###############################################################################
-add_compile_options(-Os) # TODO: Temporary
+add_compile_options(-O0) # TODO: Temporary
+add_link_options(-g)
+add_link_options(-g3)
 ###############################################################################
 

@@ -4,7 +4,7 @@ si SWD
 speed 4000
 r
 h
-loadfile build/test_project.hex
+loadfile build/components/main/main.hex
 r
 g
 exit

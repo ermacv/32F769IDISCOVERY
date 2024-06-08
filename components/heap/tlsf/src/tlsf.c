@@ -213,7 +213,8 @@ typedef struct TLSF_struct {
     u32_t tlsf_signature;
 
 #if TLSF_USE_LOCKS
-    StaticSemaphore_t lock_buffer;
+    SemaphoreHandle_t xSemaphore;
+    StaticSemaphore_t xMutexBuffer;
     TLSF_MLOCK_T lock;
 #endif
 
@@ -485,7 +486,7 @@ size_t init_memory_pool(size_t mem_pool_size, void *mem_pool)
 
     tlsf->tlsf_signature = TLSF_SIGNATURE;
 
-    TLSF_CREATE_LOCK(tlsf->lock, &tlsf->lock_buffer);
+    TLSF_CREATE_LOCK(&tlsf->lock);
 
     ib = process_area(GET_NEXT_BLOCK
                       (mem_pool, ROUNDUP_SIZE(sizeof(tlsf_t))), ROUNDDOWN_SIZE(mem_pool_size - sizeof(tlsf_t)));
@@ -610,7 +611,7 @@ void destroy_memory_pool(void *mem_pool)
 
     tlsf->tlsf_signature = 0;
 
-    TLSF_DESTROY_LOCK(tlsf->lock);
+    TLSF_DESTROY_LOCK(&tlsf->lock);
 
 }
 
@@ -635,11 +636,11 @@ void *tlsf_malloc(size_t size)
     }
 #endif
 
-    TLSF_ACQUIRE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_ACQUIRE_LOCK(&((tlsf_t *)mp)->lock);
 
     ret = malloc_ex(size, mp);
 
-    TLSF_RELEASE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_RELEASE_LOCK(&((tlsf_t *)mp)->lock);
 
     return ret;
 }
@@ -649,11 +650,11 @@ void tlsf_free(void *ptr)
 {
 /******************************************************************/
 
-    TLSF_ACQUIRE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_ACQUIRE_LOCK(&((tlsf_t *)mp)->lock);
 
     free_ex(ptr, mp);
 
-    TLSF_RELEASE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_RELEASE_LOCK(&((tlsf_t *)mp)->lock);
 
 }
 
@@ -669,11 +670,11 @@ void *tlsf_realloc(void *ptr, size_t size)
 	}
 #endif
 
-    TLSF_ACQUIRE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_ACQUIRE_LOCK(&((tlsf_t *)mp)->lock);
 
     ret = realloc_ex(ptr, size, mp);
 
-    TLSF_RELEASE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_RELEASE_LOCK(&((tlsf_t *)mp)->lock);
 
     return ret;
 }
@@ -684,11 +685,11 @@ void *tlsf_calloc(size_t nelem, size_t elem_size)
 /******************************************************************/
     void *ret;
 
-    TLSF_ACQUIRE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_ACQUIRE_LOCK(&((tlsf_t *)mp)->lock);
 
     ret = calloc_ex(nelem, elem_size, mp);
 
-    TLSF_RELEASE_LOCK(((tlsf_t *)mp)->lock);
+    TLSF_RELEASE_LOCK(&((tlsf_t *)mp)->lock);
 
     return ret;
 }

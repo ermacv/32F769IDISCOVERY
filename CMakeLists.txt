@@ -14,4 +14,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/components/syscalls)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/drivers)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/startup)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/main)
+add_subdirectory(${PROJECT_SOURCE_DIR}/components/os)
+add_subdirectory(${PROJECT_SOURCE_DIR}/components/heap)
+add_subdirectory(${PROJECT_SOURCE_DIR}/components/log)
 ###############################################################################

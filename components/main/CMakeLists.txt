@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/main.c)
 target_link_libraries(${PROJECT_NAME} PRIVATE stm32_startup)
 target_link_libraries(${PROJECT_NAME} PRIVATE syscalls)
+target_link_libraries(${PROJECT_NAME} PRIVATE freertos)
 target_link_options(${PROJECT_NAME} PRIVATE -Wl,-Map=$<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.map)
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
 ###############################################################################
