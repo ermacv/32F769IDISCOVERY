@@ -3,11 +3,15 @@
 #include <assert.h>
 
 #define kHEAP_BUFFER_RAM_SZ (448 * 1024)
+#define kHEAP_BUFFER_SDRAM_SZ (16 * 1024 * 1024)
 
 static uint8_t heap_buffer_ram[kHEAP_BUFFER_RAM_SZ];
+static uint8_t heap_buffer_sdram[kHEAP_BUFFER_SDRAM_SZ] __attribute__((section(".SDRAM_HEAP")));
 
 void heap_init(void) {
   size_t sz = init_memory_pool(kHEAP_BUFFER_RAM_SZ, heap_buffer_ram);
+  assert(sz != (size_t)(-1));
+  sz = init_memory_pool(kHEAP_BUFFER_SDRAM_SZ, heap_buffer_sdram);
   assert(sz != (size_t)(-1));
 }
 

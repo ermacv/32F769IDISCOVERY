@@ -44,8 +44,9 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Memories definition */
 MEMORY
 {
-  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 512K
-  FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 2048K
+  RAM     (xrw)   : ORIGIN = 0x20000000,   LENGTH = 512K
+  FLASH    (rx)   : ORIGIN = 0x08000000,   LENGTH = 2048K
+  SDRAM    (rw)   : ORIGIN = 0xC0000000,   LENGTH = 16M
 }
 
 /* Sections */
@@ -174,6 +175,11 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
+
+  .SDRAM_HEAP :
+  {
+    . = ALIGN(4);
+  } >SDRAM
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :

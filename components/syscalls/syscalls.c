@@ -182,14 +182,8 @@ static void main_caller(void *arg) {
 }
 
 void ll_main(void) {
-  syscalls_init();
-  uint8_t *ptr = (void *)0xC0000000;
-  // printf("ptr = %u\r\n", *ptr);
-  // *ptr = 1;
-  // printf("ptr = %u\r\n", *ptr);
   low_level_init();
-  // *ptr = 1;
-  // printf("ptr = %u\r\n", *ptr);
+  syscalls_init();
   xTaskCreate(main_caller, "main", 256, NULL, 1, NULL);
   vTaskStartScheduler();
 }

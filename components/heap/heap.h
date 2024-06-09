@@ -3,7 +3,9 @@
 #include <stdlib.h>
 
 typedef enum {
- kHEAP_TYPE_INT_RAM = 0,
+  kHEAP_TYPE_INT_RAM = (1 << 0),
+  kHEAP_TYPE_INT_SDRAM = (1 << 1),
+  kHEAP_TYPE_INT_ANY = kHEAP_TYPE_INT_RAM | kHEAP_TYPE_INT_SDRAM,
 } heap_type_t;
 
 void heap_init(void);
