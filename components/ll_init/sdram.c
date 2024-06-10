@@ -98,6 +98,7 @@ void init_sdram(void) {
 
   LL_Init1msTick(216000000);
   LL_mDelay(1);
+  
 
   command.CommandMode = FMC_SDRAM_CMD_PALL;
   FMC_SDRAM_SendCommand(hsdram1.Instance, &command, 0);
