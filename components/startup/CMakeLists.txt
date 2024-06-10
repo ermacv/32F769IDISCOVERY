@@ -9,5 +9,6 @@ target_sources(stm32_startup INTERFACE ${PROJECT_SOURCE_DIR}/system_stm32f7xx.c)
 target_link_options(stm32_startup INTERFACE -T${PROJECT_SOURCE_DIR}/STM32F769NIHX_FLASH.ld)
 set_target_properties(stm32_startup PROPERTIES LINK_DEPENDS ${PROJECT_SOURCE_DIR}/STM32F769NIHX_FLASH.ld)
 target_link_libraries(stm32_startup INTERFACE stm32_hal_drivers)
+target_link_libraries(stm32_startup INTERFACE ll_init)
 target_link_libraries(stm32_startup INTERFACE syscalls)
 ###############################################################################

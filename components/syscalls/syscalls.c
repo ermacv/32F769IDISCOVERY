@@ -14,15 +14,12 @@
 #include "semphr.h"
 #include "task.h"
 
-extern void main(void);
-extern void low_level_init(void);
-
 static SemaphoreHandle_t log_lock;
 static SemaphoreHandle_t heap_lock;
 static StaticSemaphore_t log_lock_buf;
 static StaticSemaphore_t heap_lock_buf;
 
-static void syscalls_init(void) {
+void syscalls_init(void) {
   heap_init();
   SEGGER_RTT_Init();
   log_lock = xSemaphoreCreateMutexStatic(&log_lock_buf);
@@ -159,12 +156,12 @@ void __wrap_free(void *p) {
 }
 
 int __wrap_printf(const char * sFormat, ...) {
-  // xSemaphoreTake(log_lock, portMAX_DELAY);
+  xSemaphoreTake(log_lock, portMAX_DELAY);
   va_list ap;
   va_start(ap, sFormat);
   int res = SEGGER_RTT_vprintf(0, sFormat, &ap);
   va_end(ap);
-  // xSemaphoreGive(log_lock);
+  xSemaphoreGive(log_lock);
   return res;
 }
 
@@ -173,17 +170,4 @@ void __assert_func (const char * file, int line, const char *func, const char *e
   (void)expr;
   printf("Assertion triggered. %s:%d\r\n", file, line);
   abort();
-}
-
-static void main_caller(void *arg) {
-  (void)arg;
-  main();
-  vTaskDelete(NULL);
-}
-
-void ll_main(void) {
-  low_level_init();
-  syscalls_init();
-  xTaskCreate(main_caller, "main", 256, NULL, 1, NULL);
-  vTaskStartScheduler();
 }

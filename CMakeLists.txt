@@ -17,4 +17,5 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/components/main)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/os)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/heap)
 add_subdirectory(${PROJECT_SOURCE_DIR}/components/log)
+add_subdirectory(${PROJECT_SOURCE_DIR}/components/ll_init)
 ###############################################################################
