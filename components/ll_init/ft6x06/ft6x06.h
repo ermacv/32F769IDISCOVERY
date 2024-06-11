@@ -416,6 +416,9 @@ void ft6x06_TS_GetTouchInfo(uint16_t   DeviceAddr,
 
 #endif /* TS_MULTI_TOUCH_SUPPORTED == 1 */
 
+
+void ft6x06_TS_ReadAll(uint16_t DeviceAddr, uint8_t *data);
+
 /* Imported TS IO functions --------------------------------------------------------*/
 
 /** @defgroup ft6x06_Imported_Functions

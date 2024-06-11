@@ -81,7 +81,8 @@ TS_DrvTypeDef ft6x06_ts_drv =
   ft6x06_TS_EnableIT,
   ft6x06_TS_ClearIT,
   ft6x06_TS_ITStatus,
-  ft6x06_TS_DisableIT
+  ft6x06_TS_DisableIT,
+  ft6x06_TS_ReadAll
 };
 
 /* ft6x06 instances by address */
@@ -493,6 +494,11 @@ static uint8_t ft6x06_GetInstance(uint16_t DeviceAddr)
   }
   
   return 0xFF;
+}
+
+void ft6x06_TS_ReadAll(uint16_t DeviceAddr, uint8_t *data)
+{
+  TS_IO_ReadMultiple(DeviceAddr, FT6206_DEV_MODE_REG, data, 0x0e); 
 }
 
 /**

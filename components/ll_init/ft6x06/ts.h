@@ -77,6 +77,7 @@ typedef struct
   void       (*ClearIT)(uint16_t);
   uint8_t    (*GetITStatus)(uint16_t);
   void       (*DisableIT)(uint16_t);
+  void       (*ReadAll)(uint16_t);
 }TS_DrvTypeDef;
 /**
   * @}

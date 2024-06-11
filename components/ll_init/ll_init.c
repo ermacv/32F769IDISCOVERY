@@ -288,7 +288,7 @@ static void low_level_init(void) {
   init_sdram();
   BSP_QSPI_Init();
 
-  BSP_TS_Init(800, 472);
+  BSP_TS_Init(800, 480);
   BSP_TS_ITConfig();
 }
 
@@ -303,30 +303,44 @@ static void ts(void *arg) {
   TS_StateTypeDef TS_State;
   while(1) {
     xSemaphoreTake(ts_semaphore, portMAX_DELAY);
-    BSP_TS_GetState(&TS_State);
-    for (uint8_t i = 0; i < TS_State.touchDetected; i++) {
-      if (TS_State.touchEventId[i] == TOUCH_EVENT_PRESS_DOWN) {
-        printf("DOWN[%u]. X: %u, Y: %u\r\n", i, TS_State.touchX[i], TS_State.touchY[i]);
-      } else if (TS_State.touchEventId[i] == TOUCH_EVENT_LIFT_UP) {
-        printf("UP[%u]. X: %u, Y: %u\r\n", i, TS_State.touchX[i], TS_State.touchY[i]);
-      // } else if (TS_State.touchEventId[i] == TOUCH_EVENT_CONTACT) {
-      //   printf("CONTACT. X: %u, Y: %u\r\n", TS_State.touchX[i], TS_State.touchY[i]);
-      }
+    uint8_t data[0x0e];
+    BSP_TS_ReadAll(&TS_State, data);
 
+    if (data[2]) {
+      // printf("Touched %u points\r\n", data[2]);
     }
 
-    if (TS_State.gestureId == GEST_ID_MOVE_UP) {
-      printf("GEST_ID_MOVE_UP");
-    } else if (TS_State.gestureId == GEST_ID_MOVE_RIGHT) {
-      printf("GEST_ID_MOVE_RIGHT");
-    } else if (TS_State.gestureId == GEST_ID_MOVE_DOWN) {
-      printf("GEST_ID_MOVE_DOWN");
-    } else if (TS_State.gestureId == GEST_ID_MOVE_LEFT) {
-      printf("GEST_ID_MOVE_LEFT");
-    } else if (TS_State.gestureId == GEST_ID_ZOOM_IN) {
-      printf("GEST_ID_ZOOM_IN");
-    } else if (TS_State.gestureId == GEST_ID_ZOOM_OUT) {
-      printf("GEST_ID_ZOOM_OUT");
+    if (data[3] >> 6 == 0) {
+      printf("Down\r\n");
+    } else if (data[3] >> 6 == 1) {
+      printf("Up\r\n");
+    }
+
+    // for (uint8_t i = 0; i < data[2]; i++) {
+    //   data[3];
+    //   // printf("[%u] X: %u, Y: %u\r\n", i, TS_State.touchX[i], TS_State.touchY[i]);
+    //   // if (TS_State.touchEventId[i] == TOUCH_EVENT_PRESS_DOWN) {
+    //   //   printf("DOWN[%u]. X: %u, Y: %u\r\n", i, TS_State.touchX[i], TS_State.touchY[i]);
+    //   // } else if (TS_State.touchEventId[i] == TOUCH_EVENT_LIFT_UP) {
+    //   //   printf("UP[%u]. X: %u, Y: %u\r\n", i, TS_State.touchX[i], TS_State.touchY[i]);
+    //   // // } else if (TS_State.touchEventId[i] == TOUCH_EVENT_CONTACT) {
+    //   // //   printf("CONTACT. X: %u, Y: %u\r\n", TS_State.touchX[i], TS_State.touchY[i]);
+    //   // }
+
+    // }
+
+    if (data[1] == FT6206_GEST_ID_MOVE_UP) {
+      printf("GEST_ID_MOVE_UP\r\n");
+    } else if (data[1] == FT6206_GEST_ID_MOVE_RIGHT) {
+      printf("GEST_ID_MOVE_RIGHT\r\n");
+    } else if (data[1] == FT6206_GEST_ID_MOVE_DOWN) {
+      printf("GEST_ID_MOVE_DOWN\r\n");
+    } else if (data[1] == FT6206_GEST_ID_MOVE_LEFT) {
+      printf("GEST_ID_MOVE_LEFT\r\n");
+    } else if (data[1] == FT6206_GEST_ID_ZOOM_IN) {
+      printf("GEST_ID_ZOOM_IN\r\n");
+    } else if (data[1] == FT6206_GEST_ID_ZOOM_OUT) {
+      printf("GEST_ID_ZOOM_OUT\r\n");
     }
   }
 }

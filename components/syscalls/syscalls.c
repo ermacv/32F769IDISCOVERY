@@ -94,7 +94,8 @@ int _write(int file, char *ptr, int len)
   int DataIdx;
 
   for (DataIdx = 0; DataIdx < len; DataIdx++) {
-    SEGGER_RTT_PutChar(0, *ptr++);
+    SEGGER_RTT_PutChar(0, *ptr);
+    ptr++;
   }
   return len;
 }
@@ -163,6 +164,14 @@ int __wrap_printf(const char * sFormat, ...) {
   va_end(ap);
   xSemaphoreGive(log_lock);
   return res;
+}
+
+int __wrap_puts(const char *str) {
+  xSemaphoreTake(log_lock, portMAX_DELAY);
+  int counter = SEGGER_RTT_WriteString(0, str);
+  SEGGER_RTT_PutChar(0, '\n');
+  xSemaphoreGive(log_lock);
+  return counter;
 }
 
 void __assert_func (const char * file, int line, const char *func, const char *expr) {

@@ -450,6 +450,11 @@ __weak void BSP_TS_INT_MspInit(void)
   HAL_GPIO_Init(TS_INT_GPIO_PORT, &gpio_init_structure);
 }
 
+uint8_t BSP_TS_ReadAll(TS_StateTypeDef *TS_State, uint8_t *data)
+{
+  ft6x06_TS_ReadAll(I2C_Address, data);
+}
+
 /**
   * @}
   */
