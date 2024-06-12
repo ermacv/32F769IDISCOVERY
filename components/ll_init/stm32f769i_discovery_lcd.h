@@ -54,7 +54,7 @@
 // #include "stm32f769i_discovery_sdram.h"
 #include "stm32f769i_discovery.h"
 
-// #include "../../../Utilities/Fonts/fonts.h"
+#include "fonts.h"
 
 #include <string.h> /* use of memset() */
 
@@ -336,8 +336,8 @@ void     BSP_LCD_SetTextColor(uint32_t Color);
 uint32_t BSP_LCD_GetTextColor(void);
 void     BSP_LCD_SetBackColor(uint32_t Color);
 uint32_t BSP_LCD_GetBackColor(void);
-// void     BSP_LCD_SetFont(sFONT *fonts);
-// sFONT    *BSP_LCD_GetFont(void);
+void     BSP_LCD_SetFont(sFONT *fonts);
+sFONT    *BSP_LCD_GetFont(void);
 
 uint32_t BSP_LCD_ReadPixel(uint16_t Xpos, uint16_t Ypos);
 void     BSP_LCD_DrawPixel(uint16_t Xpos, uint16_t Ypos, uint32_t pixel);
@@ -374,7 +374,7 @@ void     BSP_LCD_SetBrightness(uint8_t BrightnessValue);
   */
 
 /* @brief DMA2D handle variable */
-// extern DMA2D_HandleTypeDef hdma2d_discovery;
+extern DMA2D_HandleTypeDef hdma2d_discovery;
 
 /**
   * @}
